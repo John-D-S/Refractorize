@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JohnsLilHelper;
 
 public class CharacterController : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class CharacterController : MonoBehaviour
     private float maxObjectHeldDistance = 1;
 
     private GameObject heldObject;
+    private Rigidbody2D heldObjectRB;
+    private FixedJoint2D heldFixedJoint;
+    private bool firstClick = true; // this is for detecting if this is the first or second click when picking up an object so that you don't immediately drop it
     private bool rotatingObject;
 
     private Rigidbody2D rb;
@@ -23,6 +27,7 @@ public class CharacterController : MonoBehaviour
     {
         Debug.Log(Vector2.zero.normalized);
         rb = gameObject.GetComponent<Rigidbody2D>();
+        Physics2D.queriesStartInColliders = false;
     }
 
     // Update is called once per frame
@@ -42,22 +47,28 @@ public class CharacterController : MonoBehaviour
             // If it hits something...
             if (hit.collider.gameObject.GetComponent<Pickupable>())
             {
-                Debug.Log("hello");
                 heldObject = hit.collider.gameObject;
-                heldObject.transform.parent = gameObject.transform;
-                heldObject.transform.position = Vector2.up;
+                heldFixedJoint = heldObject.GetComponent<FixedJoint2D>();
+                heldFixedJoint.connectedBody = rb;
+                heldFixedJoint.enabled = true;
+                heldObject.transform.position = transform.TransformPoint(Vector2.up * 0.75f);
             }
+        }
+        else if (Input.GetButton("LeftClick") && heldObject)
+        {
+            PhysRotatable.PhysRotateTowardMouse(heldObjectRB, rotationSpeed);
+        }
+        else if (Input.GetButtonUp("LeftClick"))
+        {
+            heldFixedJoint.connectedBody = null;
+            heldFixedJoint.enabled = false;
+            heldObject = null;
         }
     }
 
     private void FixedUpdate()
     {
-        PhysRotateTowardMouse();
-    }
-
-    void PhysRotateTowardMouse()
-    {
-        rb.AddTorque(Vector2.Dot(-transform.right, (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized) * rotationSpeed);
+        PhysRotatable.PhysRotateTowardMouse(rb, rotationSpeed);
         rb.AddForce(movementDirection);
     }
 }

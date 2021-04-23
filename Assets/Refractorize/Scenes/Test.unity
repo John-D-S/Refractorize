@@ -3223,6 +3223,7 @@ GameObject:
   - component: {fileID: 1195073800}
   - component: {fileID: 1195073803}
   - component: {fileID: 1195073799}
+  - component: {fileID: 1195073804}
   m_Layer: 0
   m_Name: Glass Block
   m_TagString: Untagged
@@ -3346,7 +3347,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -3354,6 +3355,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!255 &1195073804
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195073798}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: -2.55, y: -0.3}
+  m_DampingRatio: 0
+  m_Frequency: 0
 --- !u!1 &1225011098
 GameObject:
   m_ObjectHideFlags: 0
