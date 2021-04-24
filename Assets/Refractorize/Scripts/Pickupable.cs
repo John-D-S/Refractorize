@@ -7,6 +7,6 @@ public class Pickupable : MonoBehaviour
 {
     private void Start()
     {
-        gameObject.GetComponent<FixedJoint2D>().enabled = false;
+        gameObject.GetComponent<HingeJoint2D>().enabled = false;
     }
 }

@@ -40,6 +40,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Lazer
+    uniqueID: 4161450635
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
