@@ -57,7 +57,7 @@ public class CharacterController : MonoBehaviour
                     heldHingeJoint.enabled = true;
                     originalHeldObjectDrag = heldObjectRB.drag;
                     heldObjectRB.drag = 0;
-                    heldObjectFacingDireciton = -heldObject.transform.InverseTransformVector(Camera.main.ScreenToWorldPoint(Input.mousePosition) - heldObject.transform.position);
+                    heldObjectFacingDireciton = -heldObject.transform.InverseTransformVector(Camera.main.ScreenToWorldPoint(Input.mousePosition) - gameObject.transform.position).normalized;
                 }
 
             }
@@ -87,11 +87,11 @@ public class CharacterController : MonoBehaviour
         {
             if (!rotatingHeldObject)// rotate held object toward facing direction
             {
-                PhysRotatable.PhysRotateTowardVector(heldObjectRB, rotationSpeed, transform.right, heldObjectFacingDireciton);
+                PhysRotatable.PhysRotateTowardVector(heldObjectRB, rotationSpeed, transform.right, heldObjectFacingDireciton.normalized);
             }
             else if (rotatingHeldObject)// rotate held object toward mouse and keep player's rotation from drifting;
             {
-                PhysRotatable.PhysRotateTowardMouse(heldObjectRB, rotationSpeed, Vector2.Perpendicular(heldObjectFacingDireciton));
+                PhysRotatable.PhysRotateTowardMouse(heldObjectRB, rotationSpeed, Vector2.Perpendicular(heldObjectFacingDireciton.normalized));
                 PhysRotatable.PhysRotateTowardVector(rb, rotationSpeed, tempPlayerFaceDirection);
             }
         }
