@@ -17,9 +17,12 @@ public class CharacterController : MonoBehaviour
 
     private GameObject heldObject;
     private Rigidbody2D heldObjectRB;
-    private FixedJoint2D heldFixedJoint;
-    private bool firstClick = true; // this is for detecting if this is the first or second click when picking up an object so that you don't immediately drop it
-    private bool rotatingObject;
+    private HingeJoint2D heldHingeJoint;
+    private bool rotatingHeldObject;
+    private float originalHeldObjectDrag;
+    private Vector2 heldObjectFacingDireciton;
+    
+    private Vector2 tempPlayerFaceDirection;
 
     private Rigidbody2D rb;
     // Start is called before the first frame update
@@ -27,7 +30,7 @@ public class CharacterController : MonoBehaviour
     {
         Debug.Log(Vector2.zero.normalized);
         rb = gameObject.GetComponent<Rigidbody2D>();
-        Physics2D.queriesStartInColliders = false;
+        //  Physics2D.queriesStartInColliders = false;
     }
 
     // Update is called once per frame
@@ -42,33 +45,69 @@ public class CharacterController : MonoBehaviour
         {
             
             RaycastHit2D hit = Physics2D.Raycast(transform.position, gameObject.transform.up, maxObjectHeldDistance);
-            
 
-            // If it hits something...
-            if (hit.collider.gameObject.GetComponent<Pickupable>())
+            if (hit)
             {
-                heldObject = hit.collider.gameObject;
-                heldFixedJoint = heldObject.GetComponent<FixedJoint2D>();
-                heldFixedJoint.connectedBody = rb;
-                heldFixedJoint.enabled = true;
-                heldObject.transform.position = transform.TransformPoint(Vector2.up * 0.75f);
+                if (hit.collider.gameObject.GetComponent<Pickupable>())
+                {
+                    heldObject = hit.collider.gameObject;
+                    heldHingeJoint = heldObject.GetComponent<HingeJoint2D>();
+                    heldObjectRB = heldObject.GetComponent<Rigidbody2D>();
+                    heldHingeJoint.connectedBody = rb;
+                    heldHingeJoint.enabled = true;
+                    originalHeldObjectDrag = heldObjectRB.drag;
+                    heldObjectRB.drag = 0;
+                    heldObjectFacingDireciton = -heldObject.transform.InverseTransformVector(Camera.main.ScreenToWorldPoint(Input.mousePosition) - heldObject.transform.position);
+                }
+
             }
+            // If it hits something...
         }
-        else if (Input.GetButton("LeftClick") && heldObject)
+        else if (Input.GetButtonDown("LeftClick") && heldObject)
         {
-            PhysRotatable.PhysRotateTowardMouse(heldObjectRB, rotationSpeed);
+            rotatingHeldObject = true;
+            tempPlayerFaceDirection = transform.up;
         }
-        else if (Input.GetButtonUp("LeftClick"))
+        else if (Input.GetButtonUp("LeftClick") && rotatingHeldObject)//putting down the object
         {
-            heldFixedJoint.connectedBody = null;
-            heldFixedJoint.enabled = false;
+            heldObjectRB.drag = originalHeldObjectDrag;
+            heldHingeJoint.connectedBody = null;
+            heldHingeJoint.enabled = false;
+            heldHingeJoint = null;
+            heldObjectRB = null;
             heldObject = null;
+            rotatingHeldObject = false;
         }
     }
 
     private void FixedUpdate()
     {
-        PhysRotatable.PhysRotateTowardMouse(rb, rotationSpeed);
+        //for rotating the object
+        if (heldObject)
+        {
+            if (!rotatingHeldObject)// rotate held object toward facing direction
+            {
+                PhysRotatable.PhysRotateTowardVector(heldObjectRB, rotationSpeed, transform.right, heldObjectFacingDireciton);
+            }
+            else if (rotatingHeldObject)// rotate held object toward mouse and keep player's rotation from drifting;
+            {
+                PhysRotatable.PhysRotateTowardMouse(heldObjectRB, rotationSpeed, Vector2.Perpendicular(heldObjectFacingDireciton));
+                PhysRotatable.PhysRotateTowardVector(rb, rotationSpeed, tempPlayerFaceDirection);
+            }
+        }
+
+        //for rotating the player
+        if (!rotatingHeldObject)
+        {
+            if (!heldObject)
+            {
+                PhysRotatable.PhysRotateTowardMouse(rb, rotationSpeed);
+            }
+            else if (heldObject)
+            {
+                PhysRotatable.PhysRotateTowardMouse(rb, rotationSpeed * 2);
+            }
+        }
         rb.AddForce(movementDirection);
     }
 }
