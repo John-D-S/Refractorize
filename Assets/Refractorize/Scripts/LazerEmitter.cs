@@ -34,7 +34,7 @@ public class LazerEmitter : MonoBehaviour
             if (shootLazer)
             {
                 Vector2 startOfBeamAddition = (position - new Vector2(lastPosition.x, lastPosition.y)).normalized * 0.05f;
-                Vector2 endOfBeamAddition = (position - new Vector2(lastPosition.x, lastPosition.y)).normalized * 0.95f;
+                Vector2 endOfBeamAddition = Vector3.ClampMagnitude(position - new Vector2(lastPosition.x, lastPosition.y), 1) * 0.95f;
 
                 Vector3 StartWidthEveningPoint = lastPosition + new Vector3(startOfBeamAddition.x, startOfBeamAddition.y, -0.1f);
                 Vector3 EndWidthEveningPoint = lastPosition + new Vector3(endOfBeamAddition.x, endOfBeamAddition.y, -0.1f);
