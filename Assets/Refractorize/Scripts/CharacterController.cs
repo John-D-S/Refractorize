@@ -28,7 +28,6 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(Vector2.zero.normalized);
         rb = gameObject.GetComponent<Rigidbody2D>();
         //  Physics2D.queriesStartInColliders = false;
     }

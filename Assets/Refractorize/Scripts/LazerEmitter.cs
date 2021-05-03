@@ -11,13 +11,19 @@ public class LazerEmitter : MonoBehaviour
     private LineRenderer lazerBeam;
     private List<Vector3> lazerPoints = new List<Vector3>();
 
-    private LazerActivator currentActivator = null;
-    private Collider previousActivatorCollider = null;
+    private Dictionary<Collider2D, LazerActivator> lazerActivatorsByCollider = new Dictionary<Collider2D, LazerActivator>();
+    private List<LazerActivator> thisFrameActivators = new List<LazerActivator>();
+    private List<LazerActivator> lastFrameActivators = new List<LazerActivator>();
 
     // Start is called before the first frame update
     void Start()
     {
         lazerBeam = gameObject.GetComponent<LineRenderer>();
+        
+        foreach (LazerActivator lazerActivator in GameObject.FindObjectsOfType<LazerActivator>())
+        {
+            lazerActivatorsByCollider.Add(lazerActivator.gameObject.GetComponent<Collider2D>(), lazerActivator);
+        }
     }
 
     // Update is called once per frame
@@ -45,17 +51,29 @@ public class LazerEmitter : MonoBehaviour
                 lazerPoints.Add(StartWidthEveningPoint);
                 lazerPoints.Add(EndWidthEveningPoint);
             }
+            //Debug.Log(shootLazer);
             i++;
         }
 
         lazerBeam.positionCount = lazerPoints.Count;
-        Debug.Log(lazerPoints.Count);
+        //Debug.Log(lazerPoints.Count);
         i = 0;
         foreach (Vector3 point in lazerPoints)
         {
             lazerBeam.SetPosition(i, point);
             i++;
         }
+
+        foreach (LazerActivator lazerActivator in lastFrameActivators)
+        {
+
+            if (!thisFrameActivators.Contains(lazerActivator))
+                lazerActivator.Deactivate();
+        }
+
+
+        lastFrameActivators = thisFrameActivators;
+        thisFrameActivators = new List<LazerActivator>();
     }
 
     private void ShootLazer(Vector2 _position, Vector2 _direction, out Vector2 _nextPosition, out Vector2 _nextRotation, out bool _shootLazer)
@@ -66,7 +84,6 @@ public class LazerEmitter : MonoBehaviour
         _shootLazer = true;
         if (hit)
         {
-            Debug.Log(hit.collider.tag);
             switch (hit.collider.tag)
             {
                 case "Mirror":
@@ -77,19 +94,19 @@ public class LazerEmitter : MonoBehaviour
                 //    _nextPosition = hit.point;
                 //    _nextRotation = Vector3.AngleBetween(_direction, hit.normal)
                 case "Activator":
-                    if (!currentActivator || hit.collider != previousActivatorCollider)//if there is not a current activator, or if this activator is not the same as the one from the last frame
-                    {
-                        currentActivator = hit.collider.GetComponent<LazerActivator>();
-                    }
+                    LazerActivator currentActivator = lazerActivatorsByCollider[hit.collider];
                     currentActivator.Activate();
+                    if (currentActivator.laserPassThrough)
+                    {
+                        _nextPosition = hit.point + _direction * 0.01f;
+                        _nextRotation = _direction;
+                    }
+                    if (!thisFrameActivators.Contains(currentActivator))
+                    {
+                        thisFrameActivators.Add(currentActivator);
+                    }
                     return;
                 default:
-                    if (currentActivator)
-                    {
-                        currentActivator.Deactivate();
-                        currentActivator = null;
-                        previousActivatorCollider = null;
-                    }
                     return;
             }
         }

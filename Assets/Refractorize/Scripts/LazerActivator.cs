@@ -11,15 +11,23 @@ public class LazerActivator : MonoBehaviour
     [SerializeField] private Sprite activatedSprite;
     private Sprite deactivatedSprite;
 
+    public bool laserPassThrough;
+
     public void Activate()
     {
-        objectToActivate.Activate();
+        if (objectToActivate)
+        {
+            objectToActivate.Activate();
+        }
         spriteRenderer.sprite = activatedSprite;
     }
 
     public void Deactivate()
     {
-        objectToActivate.Deactivate();
+        if (objectToActivate)
+        {
+            objectToActivate.Deactivate();
+        }
         spriteRenderer.sprite = deactivatedSprite;
     }
 
