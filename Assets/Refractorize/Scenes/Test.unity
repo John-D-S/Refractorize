@@ -468,6 +468,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3421893339300046758, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 3.3782847
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421893339300046758, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.89114165
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
 --- !u!114 &854341894 stripped
@@ -5306,6 +5314,10 @@ PrefabInstance:
     - target: {fileID: 3421893339300046745, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
       propertyPath: m_Name
       value: Mobile Laser Block
+      objectReference: {fileID: 0}
+    - target: {fileID: 3421893339300046753, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
+      propertyPath: laserStartOffset
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3421893339300046756, guid: b2076a385d63db3418d40e8e68dab5cf, type: 3}
       propertyPath: m_RootOrder

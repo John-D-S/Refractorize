@@ -9,6 +9,8 @@ public class LazerEmitter : Activatable
     private int maxBeams = 50;
     [SerializeField]
     private bool shootOnlyWhenActivated;
+    [SerializeField]
+    private float laserStartOffset = 0.25f;
 
     bool activated = true;
 
@@ -18,7 +20,6 @@ public class LazerEmitter : Activatable
     private Dictionary<Collider2D, LazerActivator> lazerActivatorsByCollider = new Dictionary<Collider2D, LazerActivator>();
     private List<LazerActivator> thisFrameActivators = new List<LazerActivator>();
     private List<LazerActivator> lastFrameActivators = new List<LazerActivator>();
-
 
     public override void Activate()
     {
@@ -52,7 +53,7 @@ public class LazerEmitter : Activatable
         if (activated)
         {
             lazerPoints.Clear();
-            Vector2 position = transform.position;
+            Vector2 position = gameObject.transform.position + gameObject.transform.right * laserStartOffset;
             Vector2 direction = transform.right;
             int i = 0;
             bool shootLazer = true;
@@ -133,6 +134,7 @@ public class LazerEmitter : Activatable
 
     private Vector2 Refract(Vector2 incidentVector, Vector2 normal, float indexOfRefraction)
     {
+        indexOfRefraction = 1 / indexOfRefraction;
         float N_dot_I = Vector2.Dot(normal, incidentVector);
         float k = 1f - indexOfRefraction * indexOfRefraction * (1 - N_dot_I * N_dot_I);
         if (k < 0)
@@ -157,8 +159,20 @@ public class LazerEmitter : Activatable
                     _nextRotation = Vector2.Reflect(_direction, hit.normal).normalized;
                     return;
                 case "Refractor":
-                    _nextRotation = Refract(_direction, hit.normal, 1.55f);
+                    if (Vector2.Angle(_direction, hit.normal) > 90)//if going into the material
+                    {
+                        Debug.Log("going in");
+                        _nextRotation = Refract(_direction, hit.normal, 1.55f);
+                    }
+                    else // going out of the material
+                    {
+                        //https://www.reddit.com/r/Unity3D/comments/7k9wwi/laser_refraction_problem/
+                        Debug.Log("going out");
+                        _nextRotation = Refract(_direction, hit.normal, 1.55f);
+                    }
+                    Debug.Log(_nextRotation);
                     _nextPosition = hit.point + _nextRotation * 0.01f;
+
                     return;
                 case "Activator":
                     LazerActivator currentActivator = lazerActivatorsByCollider[hit.collider];
