@@ -103,6 +103,45 @@ public class LazerEmitter : Activatable
         }
     }
 
+    /*
+    private Vector2 AngleToVector2(float degrees, Vector2 originalDirection)
+    {
+        float radians = Mathf.Deg2Rad * (degrees + Vector2.SignedAngle(Vector2.up, originalDirection));
+        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+    }
+    private Vector2 AngleToVector2(float degrees)
+    {
+        float radians = Mathf.Deg2Rad * (degrees);
+        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+    }
+
+    private Vector2 Refract(Vector2 _incomingDirection, Vector2 _normal, float materialIOR)
+    {
+
+        if (Vector2.Angle(_normal, _incomingDirection) > 90) //going into the material
+        {
+            float angle = Mathf.Asin(Mathf.Sin(Vector2.SignedAngle(_incomingDirection, _normal) / materialIOR));
+            return AngleToVector2(angle, _normal);
+        }
+        else //coming out of the material.
+        {
+            float angle = Mathf.Asin(materialIOR * Mathf.Sin(Vector2.SignedAngle(_incomingDirection, _normal)));
+            return AngleToVector2(angle, _normal);
+        }
+    }
+    */
+
+    private Vector2 Refract(Vector2 incidentVector, Vector2 normal, float indexOfRefraction)
+    {
+        float N_dot_I = Vector2.Dot(normal, incidentVector);
+        float k = 1f - indexOfRefraction * indexOfRefraction * (1 - N_dot_I * N_dot_I);
+        if (k < 0)
+            return Vector2.zero;
+        else
+            return indexOfRefraction * incidentVector - (indexOfRefraction * N_dot_I + Mathf.Sqrt(k)) * normal;
+    }
+
+
     private void ShootLazer(Vector2 _position, Vector2 _direction, out Vector2 _nextPosition, out Vector2 _nextRotation, out bool _shootLazer)
     {
         RaycastHit2D hit = Physics2D.Raycast(_position, _direction);
@@ -117,9 +156,10 @@ public class LazerEmitter : Activatable
                     _nextPosition = hit.point;
                     _nextRotation = Vector2.Reflect(_direction, hit.normal).normalized;
                     return;
-                //case "Refractor":
-                //    _nextPosition = hit.point;
-                //    _nextRotation = Vector3.AngleBetween(_direction, hit.normal)
+                case "Refractor":
+                    _nextRotation = Refract(_direction, hit.normal, 1.55f);
+                    _nextPosition = hit.point + _nextRotation * 0.01f;
+                    return;
                 case "Activator":
                     LazerActivator currentActivator = lazerActivatorsByCollider[hit.collider];
                     currentActivator.Activate();
