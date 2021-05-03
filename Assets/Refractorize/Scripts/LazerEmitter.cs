@@ -11,6 +11,9 @@ public class LazerEmitter : MonoBehaviour
     private LineRenderer lazerBeam;
     private List<Vector3> lazerPoints = new List<Vector3>();
 
+    private LazerActivator currentActivator = null;
+    private Collider previousActivatorCollider = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +76,20 @@ public class LazerEmitter : MonoBehaviour
                 //case "Refractor":
                 //    _nextPosition = hit.point;
                 //    _nextRotation = Vector3.AngleBetween(_direction, hit.normal)
+                case "Activator":
+                    if (!currentActivator || hit.collider != previousActivatorCollider)//if there is not a current activator, or if this activator is not the same as the one from the last frame
+                    {
+                        currentActivator = hit.collider.GetComponent<LazerActivator>();
+                    }
+                    currentActivator.Activate();
+                    return;
                 default:
+                    if (currentActivator)
+                    {
+                        currentActivator.Deactivate();
+                        currentActivator = null;
+                        previousActivatorCollider = null;
+                    }
                     return;
             }
         }

@@ -19,6 +19,7 @@ public class Door : Activatable
     [SerializeField]
     private float openSpeed = 1;
     private bool open = false;
+    private bool openedLastFrame;
     //openProgress is a float between 0 and 1 which represents how open the door is. 0 is completely closed, 1 is fully open.
     private float openProgress = 0;
     
@@ -28,16 +29,22 @@ public class Door : Activatable
         rightDoorClosedPosition = RightDoor.localPosition;
     }
 
-    public override void PerformFunction()
+    public override void Activate()
     {
-        open = open ? false : true;
+        open = true;
     }
 
-    private void Update()
+    public override void Deactivate()
     {
+        open = false;
+    }
+
+    private void FixedUpdate()
+    {
+
         if (open && openProgress < 1)
         {
-            openProgress += Time.deltaTime * openSpeed;
+            openProgress += Time.fixedDeltaTime * openSpeed;
             if (openProgress < 0)
             {
                 openProgress = 0;
@@ -45,7 +52,7 @@ public class Door : Activatable
         }
         else if (!open && openProgress > 0)
         {
-            openProgress -= Time.deltaTime * openSpeed;
+            openProgress -= Time.fixedDeltaTime * openSpeed;
             if (openProgress < 0)
             {
                 openProgress = 0;
