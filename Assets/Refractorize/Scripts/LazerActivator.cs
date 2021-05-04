@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Collider2D), typeof(SpriteRenderer), typeof(LineRenderer))]
 public class LazerActivator : MonoBehaviour
 {
     [SerializeField] private Activatable objectToActivate;
@@ -10,6 +10,10 @@ public class LazerActivator : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite activatedSprite;
     private Sprite deactivatedSprite;
+    
+    [SerializeField]
+    private bool showConnection;
+    private LineRenderer connectionLine;
 
     public bool laserPassThrough;
 
@@ -38,12 +42,24 @@ public class LazerActivator : MonoBehaviour
         spriteRenderer.sprite = deactivatedSprite;
     }
 
+    private void UpdateConnectionLine()
+    {
+        connectionLine.positionCount = 2;
+        connectionLine.SetPosition(0, gameObject.transform.position - Vector3.forward * 0.01f);
+        connectionLine.SetPosition(1, objectToActivate.gameObject.transform.position - Vector3.forward * 0.01f);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         gameObject.tag = "Activator";
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         deactivatedSprite = spriteRenderer.sprite;
+        if (showConnection)
+        {
+            connectionLine = gameObject.GetComponent<LineRenderer>();
+            UpdateConnectionLine();
+        }
     }
 
     private void FixedUpdate()

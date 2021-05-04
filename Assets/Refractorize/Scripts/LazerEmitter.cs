@@ -221,7 +221,6 @@ public class LazerEmitter : Activatable
             {
                 refractor = null;
             }
-            Debug.Log(_nextRotation);
             _nextPosition = materialExitPoint + _nextRotation * 0.01f;
         }
     }
