@@ -21,6 +21,8 @@ public class LazerEmitter : Activatable
     private List<LazerActivator> thisFrameActivators = new List<LazerActivator>();
     private List<LazerActivator> lastFrameActivators = new List<LazerActivator>();
 
+    Collider2D refractor = null;
+
     public override void Activate()
     {
         activated = true;
@@ -146,51 +148,81 @@ public class LazerEmitter : Activatable
 
     private void ShootLazer(Vector2 _position, Vector2 _direction, out Vector2 _nextPosition, out Vector2 _nextRotation, out bool _shootLazer)
     {
-        RaycastHit2D hit = Physics2D.Raycast(_position, _direction);
-        _nextPosition = hit.point;
-        _nextRotation = Vector2.zero;
         _shootLazer = true;
-        if (hit)
+        if (!refractor)
         {
-            switch (hit.collider.tag)
+            RaycastHit2D hit = Physics2D.Raycast(_position, _direction);
+            _nextPosition = hit.point;
+            _nextRotation = Vector2.zero;
+            if (hit)
             {
-                case "Mirror":
-                    _nextPosition = hit.point;
-                    _nextRotation = Vector2.Reflect(_direction, hit.normal).normalized;
-                    return;
-                case "Refractor":
-                    if (Vector2.Angle(_direction, hit.normal) > 90)//if going into the material
-                    {
-                        Debug.Log("going in");
-                        _nextRotation = Refract(_direction, hit.normal, 1.55f);
-                    }
-                    else // going out of the material
-                    {
+                switch (hit.collider.tag)
+                {
+                    case "Mirror":
+                        _nextPosition = hit.point;
+                        _nextRotation = Vector2.Reflect(_direction, hit.normal).normalized;
+                        return;
+                    case "Refractor":
+                        //Debug.Log("going in");
+                        
+                        /*
                         //https://www.reddit.com/r/Unity3D/comments/7k9wwi/laser_refraction_problem/
                         Debug.Log("going out");
                         _nextRotation = Refract(_direction, hit.normal, 1.55f);
-                    }
-                    Debug.Log(_nextRotation);
-                    _nextPosition = hit.point + _nextRotation * 0.01f;
+                        */
 
-                    return;
-                case "Activator":
-                    LazerActivator currentActivator = lazerActivatorsByCollider[hit.collider];
-                    currentActivator.Activate();
-                    if (currentActivator.laserPassThrough)
-                    {
-                        _nextPosition = hit.point + _direction * 0.01f;
-                        _nextRotation = _direction;
-                    }
-                    if (!thisFrameActivators.Contains(currentActivator))
-                    {
-                        thisFrameActivators.Add(currentActivator);
-                    }
-                    return;
-                default:
-                    return;
+                        //Debug.Log(_nextRotation);
+                        _nextRotation = Refract(_direction, hit.normal, 1.55f);
+                        _nextPosition = hit.point + _nextRotation * 0.01f;
+                        refractor = hit.collider;
+                        return;
+                    case "Activator":
+                        LazerActivator currentActivator = lazerActivatorsByCollider[hit.collider];
+                        currentActivator.Activate();
+                        if (currentActivator.laserPassThrough)
+                        {
+                            _nextPosition = hit.point + _direction * 0.01f;
+                            _nextRotation = _direction;
+                        }
+                        if (!thisFrameActivators.Contains(currentActivator))
+                        {
+                            thisFrameActivators.Add(currentActivator);
+                        }
+                        return;
+                    default:
+                        return;
+                }
             }
+            _shootLazer = false;
         }
-        _shootLazer = false;
+        else
+        {
+            Vector2 backwardsRayPosition = _position + _direction * 10;
+            Vector2 backwardsRayDirection = -_direction;
+
+            Vector2 materialExitPoint = _position;
+            Vector2 materialExitNormal = Vector2.zero;
+
+            RaycastHit2D[] allHits = Physics2D.RaycastAll(backwardsRayPosition, backwardsRayDirection);
+            foreach (RaycastHit2D hit in allHits)
+                if (hit.collider == refractor)
+                {
+                    materialExitPoint = hit.point;
+                    materialExitNormal = - hit.normal;
+                    break;
+                }
+
+            _nextRotation = Refract(_direction, materialExitNormal, 1 / 1.55f);
+            if (_nextRotation == Vector2.zero)
+            {
+                _nextRotation = Vector2.Reflect(_direction, materialExitNormal);
+            }
+            else
+            {
+                refractor = null;
+            }
+            Debug.Log(_nextRotation);
+            _nextPosition = materialExitPoint + _nextRotation * 0.01f;
+        }
     }
 }
