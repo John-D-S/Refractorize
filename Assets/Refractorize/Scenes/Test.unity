@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 321656219}
   - component: {fileID: 321656218}
   m_Layer: 0
-  m_Name: teleporter
+  m_Name: Teleporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5089,7 +5089,7 @@ GameObject:
   - component: {fileID: 2131935897}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5226,7 +5226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthDepletionTime: 0.1
   MaxLives: 3
-  levelTeleporter: {fileID: 0}
+  levelTeleporter: {fileID: 321656218}
 --- !u!1001 &1891174062203952760
 PrefabInstance:
   m_ObjectHideFlags: 0
