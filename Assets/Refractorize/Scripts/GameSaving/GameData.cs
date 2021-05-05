@@ -7,7 +7,7 @@ namespace Serialization
     [System.Serializable]
     public class GameData
     {
-        public int highestLevel;
-        public List<int> levelScores;
+        public int highestLevel = 0;
+        public List<int> levelScores = new List<int>();
     }
 }
