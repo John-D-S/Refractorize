@@ -15,7 +15,7 @@ public class Teleporter : Activatable
     [SerializeField] private Sprite FinishSpriteOff;
     [SerializeField] private Sprite FinishSpriteOn;
 
-    [SerializeField] private SaveLoadSystem saveLoadSystem;
+    [SerializeField] private LevelSaver LevelSaver;
 
     private bool isOn = false;
 
@@ -49,7 +49,7 @@ public class Teleporter : Activatable
     {
         if (isOn && collision.tag == "Player")
         {
-            Debug.Log("teleporter should work");
+            LevelSaver.CompleteLevel();
         }
     }
 

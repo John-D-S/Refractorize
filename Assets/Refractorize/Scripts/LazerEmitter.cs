@@ -21,6 +21,9 @@ public class LazerEmitter : Activatable
     private List<LazerActivator> thisFrameActivators = new List<LazerActivator>();
     private List<LazerActivator> lastFrameActivators = new List<LazerActivator>();
 
+    [SerializeField]
+    private PlayerStats playerStats;
+
     Collider2D refractor = null;
 
     public override void Activate()
@@ -40,7 +43,7 @@ public class LazerEmitter : Activatable
         {
             activated = false;
         }
-        
+
         lazerBeam = gameObject.GetComponent<LineRenderer>();
         
         foreach (LazerActivator lazerActivator in GameObject.FindObjectsOfType<LazerActivator>())
@@ -187,6 +190,12 @@ public class LazerEmitter : Activatable
                         if (!thisFrameActivators.Contains(currentActivator))
                         {
                             thisFrameActivators.Add(currentActivator);
+                        }
+                        return;
+                    case "Player":
+                        if (playerStats)
+                        {
+                            playerStats.LazerBurn();
                         }
                         return;
                     default:

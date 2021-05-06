@@ -5,12 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(SpriteRenderer), typeof(LineRenderer))]
 public class LazerActivator : MonoBehaviour
 {
-    [SerializeField] private Activatable objectToActivate;
+    [SerializeField] private Activatable objectToActivate = null;
 
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite activatedSprite;
     private Sprite deactivatedSprite;
-    
+
+    [SerializeField]
+    private bool bonusActivator;
     [SerializeField]
     private bool showConnection;
     private LineRenderer connectionLine;
@@ -19,11 +21,12 @@ public class LazerActivator : MonoBehaviour
 
     private float timeUntilDeactivationMax = 0.1f;
     private float timeUntilDeactivation;
-    bool activated;
+    [System.NonSerialized]
+    public bool activated;
 
     public void Activate()
     {
-        if (objectToActivate)
+        if (!bonusActivator && objectToActivate)
         {
             objectToActivate.Activate();
         }
@@ -34,11 +37,11 @@ public class LazerActivator : MonoBehaviour
 
     public void Deactivate()
     {
-        activated = false;
-        if (objectToActivate)
+        if (!bonusActivator && objectToActivate)
         {
             objectToActivate.Deactivate();
         }
+        activated = false;
         spriteRenderer.sprite = deactivatedSprite;
     }
 

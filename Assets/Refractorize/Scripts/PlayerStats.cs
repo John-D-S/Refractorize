@@ -14,7 +14,10 @@ public class PlayerStats : MonoBehaviour
     [System.NonSerialized]
     public int Lives;
 
-    public Teleporter levelTeleporter;
+    [SerializeField]
+    private Teleporter levelStartTeleporter;
+    [SerializeField]
+    private SceneSwitcher sceneSwitcher;
 
     public void LazerBurn()
     {
@@ -34,10 +37,12 @@ public class PlayerStats : MonoBehaviour
         if (Lives > 0)
         {
             Lives -= 1;
+            Health = 1;
+            gameObject.transform.position = levelStartTeleporter.transform.position;
         }
         else
         {
-
+            sceneSwitcher.SwitchScene(gameObject.scene);
         }
     }
 

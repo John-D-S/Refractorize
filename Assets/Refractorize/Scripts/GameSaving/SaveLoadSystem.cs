@@ -13,17 +13,18 @@ namespace Serialization
         // in a build, it is in the .exe's build folder.
         private string FilePath => Application.streamingAssetsPath + "/gameData";
         [SerializeField] private bool useBinary = false;
-        [SerializeField] private GameData gameData = new GameData();
+        public GameData gameData = new GameData();
 
         private void Start()
         {
             if (!Directory.Exists(Application.streamingAssetsPath))
-            {
                 Directory.CreateDirectory(Application.streamingAssetsPath);
-            }
+            if (!File.Exists(FilePath + ".save"))
+                Save();
+            Load();
         }
 
-        void Save()
+        public void Save()
         {
             if (useBinary)
             {
@@ -35,7 +36,7 @@ namespace Serialization
             }
         }
 
-        void Load()
+        public void Load()
         {
             if (useBinary)
             {
