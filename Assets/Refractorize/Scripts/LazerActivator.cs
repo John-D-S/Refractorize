@@ -31,6 +31,8 @@ public class LazerActivator : MonoBehaviour
             objectToActivate.Activate();
         }
         activated = true;
+        Debug.Log(spriteRenderer.sprite.name);
+        Debug.Log(activatedSprite.name);
         spriteRenderer.sprite = activatedSprite;
         timeUntilDeactivation = timeUntilDeactivationMax;
     }

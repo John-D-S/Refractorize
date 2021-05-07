@@ -69,6 +69,14 @@ public class CharacterController : MonoBehaviour
         }
         else if (Input.GetButtonUp("LeftClick") && rotatingHeldObject)//putting down the object
         {
+            DropObject();
+        }
+    }
+
+    public void DropObject()
+    {
+        if (heldObject || rotatingHeldObject)
+        {
             heldObjectRB.drag = originalHeldObjectDrag;
             heldHingeJoint.connectedBody = null;
             heldHingeJoint.enabled = false;

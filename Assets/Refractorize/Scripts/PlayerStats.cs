@@ -6,6 +6,9 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private float HealthDepletionTime = 0.1f;
+    [SerializeField]
+    private float RechargeHealthTime = 0.1f;
+    private float RechargeHealthTimer = 0;
     [System.NonSerialized]
     public float Health = 1;
 
@@ -13,17 +16,30 @@ public class PlayerStats : MonoBehaviour
     private int MaxLives = 3;
     [System.NonSerialized]
     public int Lives;
+    private CharacterController characterController;
+
+    [SerializeField]
+    RectTransform healthBar;
+    [SerializeField]
+    RectTransform healthHeart;
 
     [SerializeField]
     private Teleporter levelStartTeleporter;
     [SerializeField]
     private SceneSwitcher sceneSwitcher;
 
+    void Start()
+    {
+        Lives = MaxLives;
+        characterController = gameObject.GetComponent<CharacterController>();
+    }
+    
     public void LazerBurn()
     {
         if (Health > 0)
         {
             Health -= Time.deltaTime / HealthDepletionTime;
+            RechargeHealthTimer = 0;
         }
         else
         {
@@ -37,7 +53,9 @@ public class PlayerStats : MonoBehaviour
         if (Lives > 0)
         {
             Lives -= 1;
+            Destroy(healthBar.GetChild(0).gameObject);
             Health = 1;
+            characterController.DropObject();
             gameObject.transform.position = levelStartTeleporter.transform.position;
         }
         else
@@ -45,18 +63,18 @@ public class PlayerStats : MonoBehaviour
             sceneSwitcher.SwitchScene(gameObject.scene);
         }
     }
-
-    //void Resta
-
-    // Start is called before the first frame update
-    void Start()
-    {
-            
-    }
+    
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (RechargeHealthTimer > RechargeHealthTime)
+        {
+            Health = 1;
+        }
+        else
+        {
+            RechargeHealthTimer += Time.deltaTime;
+        }
     }
 }

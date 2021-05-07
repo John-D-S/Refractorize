@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Serialization;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class LevelSaver : MonoBehaviour
 {
@@ -19,15 +19,22 @@ public class LevelSaver : MonoBehaviour
     private int levelScore = 1;
 
     [SerializeField]
-    private Texture activatedStarImagePrefab;
+    private Sprite activatedStarImagePrefab;
     [SerializeField]
+    private GameObject threeLivesStarGameObject;
     private Image threeLivesStar;
     [SerializeField]
+    private GameObject activatedBonusStarGameObject;
     private Image activatedBonusStar;
 
     [SerializeField]
     private RectTransform EndLevelScreen;
-   
+
+    private void Start()
+    {
+        threeLivesStar = threeLivesStarGameObject.GetComponent<Image>();
+        activatedBonusStar = activatedBonusStarGameObject.GetComponent<Image>();
+    }
 
     public void CompleteLevel()
     {
@@ -37,12 +44,12 @@ public class LevelSaver : MonoBehaviour
         if (playerStats.Lives == 3)
         {
             levelScore += 1;
-            threeLivesStar.image = activatedStarImagePrefab;
+            threeLivesStar.sprite = activatedStarImagePrefab;
         }
         if (bonusActivator.activated)
         {
             levelScore += 1;
-            activatedBonusStar.image = activatedStarImagePrefab;
+            activatedBonusStar.sprite = activatedStarImagePrefab;
         }
 
         //levelNumber starts at 1, so using levelScores.Count works.
