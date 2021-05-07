@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 public class SceneSwitcher : MonoBehaviour
 {
     [SerializeField]
-    private Scene menu;
+    private string menuSceneName;
     [SerializeField]
-    private Scene nextScene;
+    private string nextLevelSceneName;
 
-    public void SwitchScene(Scene scene)
+    public void SwitchScene(string sceneName)
     {
-        SceneManager.LoadScene(scene.name, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
     public void Restart()
@@ -20,8 +20,13 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene(gameObject.scene.name, LoadSceneMode.Single);
     }
 
+    public void nextScene()
+    {
+        SwitchScene(nextLevelSceneName);
+    }
+
     public void LoadMenu()
     {
-        SceneManager.LoadScene(gameObject.scene.name, LoadSceneMode.Single);
+        SceneManager.LoadScene(menuSceneName, LoadSceneMode.Single);
     }
 }

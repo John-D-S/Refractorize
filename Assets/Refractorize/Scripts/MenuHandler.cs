@@ -8,18 +8,32 @@ using UnityEngine.Audio;
 
 namespace Cody
 {
-
-
     public class MenuHandler : MonoBehaviour
     {
         public Resolution[] resolutions;
         public TMP_Dropdown resolutionDropdown;
         public AudioMixer masterAudio;
+        public GameObject PauseMenu;
+
+        private bool paused = false;
+
         public void ChangeVolume(float volume)
         {
             masterAudio.SetFloat("volume", volume);
+        }
 
+        public void Pause()
+        {
+            Time.timeScale = 0;
+            PauseMenu.SetActive(true);
+            paused = true;
+        }
 
+        public void Unpause()
+        {
+            paused = false;
+            PauseMenu.SetActive(false);
+            Time.timeScale = 1;
         }
 
         public void ToggleMute(bool isMuted)
@@ -34,13 +48,11 @@ namespace Cody
             {
                 masterAudio.SetFloat("isMutedVolume", 0);
             }
-
         }
 
         public void LoadScene(int scene)
         {
             SceneManager.LoadScene(scene);
-
         }
 
         public void QuitGame()
@@ -78,6 +90,17 @@ namespace Cody
         {
             Screen.fullScreen = isFullscreen;
 
+        }
+
+        private void Update()
+        {
+            if (Input.GetButtonDown("Cancel"))
+            {
+                if (!paused)
+                    Pause();
+                else
+                    Unpause();
+            }
         }
     }
 }

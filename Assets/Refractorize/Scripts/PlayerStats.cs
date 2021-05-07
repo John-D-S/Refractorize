@@ -60,7 +60,7 @@ public class PlayerStats : MonoBehaviour
         }
         else
         {
-            sceneSwitcher.SwitchScene(gameObject.scene);
+            sceneSwitcher.SwitchScene(gameObject.scene.name);
         }
     }
     
