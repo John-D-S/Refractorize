@@ -1016,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useBinary: 1
   gameData:
+    UnlockedLevelNames: []
     levelScores: 
 --- !u!114 &173914994
 MonoBehaviour:
@@ -1030,7 +1031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuSceneName: Menu
-  nextLevelSceneName: Menu
+  nextLevelSceneName: Ending Cutscene
 --- !u!114 &173914995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,6 +1047,7 @@ MonoBehaviour:
   saveLoadSystem: {fileID: 173914993}
   playerStats: {fileID: 2130097975}
   bonusActivator: {fileID: 5431830520063067056}
+  sceneSwitcher: {fileID: 173914994}
   levelNumber: 3
   activatedStarImagePrefab: {fileID: 21300000, guid: 3f7303ff0f5fb8b4283cde8cd67e786b, type: 3}
   threeLivesStarGameObject: {fileID: 647951927}
@@ -2141,7 +2143,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 173914994}
         m_TargetAssemblyTypeName: SceneSwitcher, Assembly-CSharp
-        m_MethodName: nextScene
+        m_MethodName: NextScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5229,12 +5231,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

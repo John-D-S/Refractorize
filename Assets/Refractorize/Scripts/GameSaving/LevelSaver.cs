@@ -14,6 +14,8 @@ public class LevelSaver : MonoBehaviour
     [SerializeField]
     private LazerActivator bonusActivator;
     [SerializeField]
+    private SceneSwitcher sceneSwitcher;
+    [SerializeField]
     private int levelNumber;
 
     private int levelScore = 1;
@@ -52,15 +54,16 @@ public class LevelSaver : MonoBehaviour
             activatedBonusStar.sprite = activatedStarImagePrefab;
         }
 
+        saveLoadSystem.Load();
+
         //levelNumber starts at 1, so using levelScores.Count works.
-        if (saveLoadSystem.gameData.levelScores.Count < levelNumber)
+
+        saveLoadSystem.gameData.levelScores[levelNumber] = levelScore;
+        if (!saveLoadSystem.gameData.UnlockedLevelNames.Contains(sceneSwitcher.nextLevelSceneName))
         {
-            saveLoadSystem.gameData.levelScores.Add(levelScore);
-            saveLoadSystem.Save();
+           saveLoadSystem.gameData.UnlockedLevelNames.Add(sceneSwitcher.nextLevelSceneName);
         }
-        else
-        {
-            saveLoadSystem.gameData.levelScores[levelNumber - 1] = levelScore;
-        }
+        saveLoadSystem.Save();
+
     }
 }

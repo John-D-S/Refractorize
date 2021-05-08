@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Serialization;
 
 public class SceneSwitcher : MonoBehaviour
 {
     [SerializeField]
     private string menuSceneName;
-    [SerializeField]
-    private string nextLevelSceneName;
+    public string nextLevelSceneName;
+
+    private SaveLoadSystem SaveLoadSystem;
 
     public void SwitchScene(string sceneName)
     {
@@ -20,7 +22,7 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene(gameObject.scene.name, LoadSceneMode.Single);
     }
 
-    public void nextScene()
+    public void NextScene()
     {
         SwitchScene(nextLevelSceneName);
     }

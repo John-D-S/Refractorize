@@ -93,6 +93,12 @@ namespace Serialization
             gameData = JsonUtility.FromJson<GameData>(json);
         }
 
+        public void ResetProgress()
+        {
+            gameData = new GameData();
+            Save();
+        }
+
         /*
         private void OnGUI()
         {
