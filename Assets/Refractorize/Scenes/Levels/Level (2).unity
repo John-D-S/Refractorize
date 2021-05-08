@@ -1046,7 +1046,7 @@ MonoBehaviour:
   saveLoadSystem: {fileID: 173914993}
   playerStats: {fileID: 2130097975}
   bonusActivator: {fileID: 5431830520063067056}
-  levelNumber: 1
+  levelNumber: 2
   activatedStarImagePrefab: {fileID: 21300000, guid: 3f7303ff0f5fb8b4283cde8cd67e786b, type: 3}
   threeLivesStarGameObject: {fileID: 647951927}
   activatedBonusStarGameObject: {fileID: 25437236}

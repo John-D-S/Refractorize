@@ -59,6 +59,7 @@ namespace Cody
         {
             Application.Quit();
         }
+
         private void Start()
         {
             resolutions = Screen.resolutions;

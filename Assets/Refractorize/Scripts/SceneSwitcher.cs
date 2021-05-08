@@ -29,4 +29,10 @@ public class SceneSwitcher : MonoBehaviour
     {
         SceneManager.LoadScene(menuSceneName, LoadSceneMode.Single);
     }
+
+    private void Start()
+    {
+        //this prevents new scenes from being loaded in paused;
+        Time.timeScale = 1;
+    }
 }
