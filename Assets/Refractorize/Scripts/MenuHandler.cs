@@ -25,14 +25,16 @@ namespace Cody
         public void Pause()
         {
             Time.timeScale = 0;
-            PauseMenu.SetActive(true);
+            if (PauseMenu)
+                PauseMenu.SetActive(true);
             paused = true;
         }
 
         public void Unpause()
         {
             paused = false;
-            PauseMenu.SetActive(false);
+            if (PauseMenu)
+                PauseMenu.SetActive(false);
             Time.timeScale = 1;
         }
 

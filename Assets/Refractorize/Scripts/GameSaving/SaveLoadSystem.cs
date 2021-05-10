@@ -98,20 +98,5 @@ namespace Serialization
             gameData = new GameData();
             Save();
         }
-
-        /*
-        private void OnGUI()
-        {
-            if (GUILayout.Button("Save"))
-            {
-                Save();
-            }
-
-            if (GUILayout.Button("Load"))
-            {
-                Load();
-            }
-        }
-        */
     }
 }

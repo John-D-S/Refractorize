@@ -110,34 +110,6 @@ public class LazerEmitter : Activatable
         }
     }
 
-    /*
-    private Vector2 AngleToVector2(float degrees, Vector2 originalDirection)
-    {
-        float radians = Mathf.Deg2Rad * (degrees + Vector2.SignedAngle(Vector2.up, originalDirection));
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-    }
-    private Vector2 AngleToVector2(float degrees)
-    {
-        float radians = Mathf.Deg2Rad * (degrees);
-        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-    }
-
-    private Vector2 Refract(Vector2 _incomingDirection, Vector2 _normal, float materialIOR)
-    {
-
-        if (Vector2.Angle(_normal, _incomingDirection) > 90) //going into the material
-        {
-            float angle = Mathf.Asin(Mathf.Sin(Vector2.SignedAngle(_incomingDirection, _normal) / materialIOR));
-            return AngleToVector2(angle, _normal);
-        }
-        else //coming out of the material.
-        {
-            float angle = Mathf.Asin(materialIOR * Mathf.Sin(Vector2.SignedAngle(_incomingDirection, _normal)));
-            return AngleToVector2(angle, _normal);
-        }
-    }
-    */
-
     private Vector2 Refract(Vector2 incidentVector, Vector2 normal, float indexOfRefraction)
     {
         indexOfRefraction = 1 / indexOfRefraction;

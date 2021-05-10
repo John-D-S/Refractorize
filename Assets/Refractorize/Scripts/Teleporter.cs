@@ -52,16 +52,4 @@ public class Teleporter : Activatable
             LevelSaver.CompleteLevel();
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (isOn)
-        {
-            if (true)
-            {
-
-            }
-        }
-    }
 }
