@@ -74,7 +74,8 @@ namespace Cody
                 options.Add(option);
                 if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
                 {
-                    currentResolutionIndex = 1;
+                    //this was previously currentResolutionIndex = 1;, which would set it to the lowest resolution every time you went to the main menu - John.
+                    currentResolutionIndex = i;
                 }
             }
             resolutionDropdown.AddOptions(options);
