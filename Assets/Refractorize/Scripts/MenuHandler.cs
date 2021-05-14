@@ -20,6 +20,8 @@ namespace Cody
         public void ChangeVolume(float volume)
         {
             masterAudio.SetFloat("volume", volume);
+            PlayerPrefs.SetFloat("Volume", volume);
+            PlayerPrefs.Save();
         }
 
         public void Pause()
@@ -81,6 +83,9 @@ namespace Cody
             resolutionDropdown.AddOptions(options);
             resolutionDropdown.value = currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
+            
+            if (PlayerPrefs.HasKey("Volume"))
+                ChangeVolume(PlayerPrefs.GetFloat("Volume"));
         }
 
 
