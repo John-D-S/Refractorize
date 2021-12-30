@@ -6,12 +6,16 @@ namespace JohnsLilHelper
     {
         public static void PhysRotateTowardMouse(Rigidbody2D rb, float rotationSpeed)
         {
-            rb.AddTorque(Vector2.Dot(-rb.transform.right, (Camera.main.ScreenToWorldPoint(Input.mousePosition) - rb.transform.position).normalized) * rotationSpeed);
+            Vector3 screenToWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePosInWorld = new Vector3(screenToWorldPoint.x, screenToWorldPoint.y, 0);
+            rb.AddTorque(Vector2.Dot(-rb.transform.right, (mousePosInWorld - rb.transform.position).normalized) * rotationSpeed);
         }
 
         public static void PhysRotateTowardMouse(Rigidbody2D rb, float rotationSpeed, Vector2 directionModifier)
         {
-            rb.AddTorque(Vector2.Dot(-rb.transform.TransformVector(directionModifier), (Camera.main.ScreenToWorldPoint(Input.mousePosition) - rb.transform.position).normalized) * rotationSpeed);
+            Vector3 screenToWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePosInWorld = new Vector3(screenToWorldPoint.x, screenToWorldPoint.y, 0);
+            rb.AddTorque(Vector2.Dot(-rb.transform.TransformVector(directionModifier), (mousePosInWorld - rb.transform.position).normalized) * rotationSpeed);
         }
 
 

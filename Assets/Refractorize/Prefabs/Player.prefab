@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 50
-  rotationSpeed: 40
+  rotationSpeed: 7.5
   maxObjectHeldDistance: 0.5
 --- !u!114 &3173014922271466506
 MonoBehaviour:
